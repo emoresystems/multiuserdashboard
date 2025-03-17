@@ -24,11 +24,18 @@ Route::get('/', function () {
         'phpVersion' => PHP_VERSION,
     ]);
 });
+// Admin routes
+Route::get('/admin', function(){
+    // return Inertia::render('Admin/Dashboard'); 
+     return "admin";
+})->middleware(['auth', 'role:admin'])->name('admin.dashboard');
 
+// Seller routes (use existing dashboard)
 Route::get('/dashboard', function () {
-    return Inertia::render('Dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+    // return Inertia::render('Dashboard');
+    return "seller";
 
+})->middleware(['auth', 'verified', 'role:seller'])->name('dashboard');
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
@@ -36,3 +43,4 @@ Route::middleware('auth')->group(function () {
 });
 
 require __DIR__.'/auth.php';
+
